@@ -1,0 +1,5 @@
+This assignment has been made using Python.
+
+The code can be found in the 'extraction_matching.py'
+The code depends on opencv, skimage and numpy.
+To manually run the code, enter the directory and execute 'python script.py'.
