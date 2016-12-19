@@ -26,6 +26,7 @@ img3 = rgb2gray(img3)
 fig,axes = plt.subplots(1, 3, figsize=(15,15))
 blobs = [(img, blob_log(img, threshold=0.1, min_sigma=10, max_sigma=30)) for img in [img1, img2, img3]]    
 for (img, blob) in blobs:
+    blob[:, 2] = blob[:, 2] * math.sqrt(2)
     ax = axes[0]
     axes = axes[1:]
     ax.set_title("")
