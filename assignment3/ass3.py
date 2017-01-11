@@ -1,18 +1,19 @@
+from sklearn.externals import joblib
 import cv2
 import numpy as np
-#import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 import os
 import itertools
 
-des_array = np.array([])
-
+# Find and return descriptors for given image
 def descriptors(image):
+	print(type(image))
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	sift = cv2.xfeatures2d.SIFT_create()
 	kp, des = sift.detectAndCompute(gray,None)
 	return des
 
+# Training function, takes descriptor array and number for K-mean
 def train(k,des_array):
 	km = KMeans(n_clusters = k)
 	km.fit(des_array)
@@ -22,20 +23,31 @@ def train(k,des_array):
 def splitFilesInDirectory(dir):
 	files = os.listdir(dir)
 	length = len(files)
-	training_files = [cv2.imread(dir + '/' + img) for img in files[length // 2:] if img[0] != "."]
-	test_files = [cv2.imread(dir + '/' + img) for img in files[:length // 2] if img[0] != "."]
+	training_files = [(cv2.imread(dir + '/' + img),img, dir, True) for img in files[length // 2:] if img[0] != "."]
+	test_files = [(cv2.imread(dir + '/' + img),img, dir, False) for img in files[:length // 2] if img[0] != "."]
 	return (training_files, test_files)
 
-# Training data
-(training_images, test_images) = splitFilesInDirectory('data')
+# Populates table
+def populateTable(categories):
+	training_data = []
+	test_data = []
+	for category in categories:
+		training_images, test_images = splitFilesInDirectory('categories/'+category)
+		training_data = training_data + training_images
+		test_data = test_data + test_images
 
-training_des_array = list(itertools.chain(*[descriptors(img) for img in training_images]))
+	training_des_array = list(itertools.chain(*[descriptors(img[0]) for img in training_data]))
+	kkm = train(700,training_des_array)
+	codebook = kkm.cluster_centers_
+	return codebook, [(img[1],img[2], img[3], kkm.predict(descriptors(img[0]))) for img in test_data+training_data]
 
-kkm = train(200,training_des_array)
+# Desired cateogires:
+cats = ['accordion', 'wheelchair', 'soccer_ball', 'bass', 'barrel', 'brontosaurus', 'lobster']
 
-codebook = kkm.cluster_centers_
+codebook, table = populateTable(cats)
 
-training_labels = kkm.predict(descriptors(training_images[0]))
-test_labels = kkm.predict(descriptors(test_images[0]))
+# Saves table and codebook
+joblib.dump(codebook,'codebook.pkl')
+joblib.dump(table,'table.pkl')
 
-print(test_labels)
+
