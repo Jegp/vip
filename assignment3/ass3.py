@@ -28,7 +28,7 @@ def splitFilesInDirectory(dir):
 	return (training_files, test_files)
 
 # Populates table
-def populateTable(categories):
+def populateTable(categories,k):
 	training_data = []
 	test_data = []
 	for category in categories:
@@ -37,17 +37,19 @@ def populateTable(categories):
 		test_data = test_data + test_images
 
 	training_des_array = list(itertools.chain(*[descriptors(img[0]) for img in training_data]))
-	kkm = train(700,training_des_array)
+	kkm = train(k,training_des_array)
 	codebook = kkm.cluster_centers_
 	return codebook, [(img[1],img[2], img[3], kkm.predict(descriptors(img[0]))) for img in test_data+training_data]
 
-# Desired cateogires:
-cats = ['accordion', 'wheelchair', 'soccer_ball', 'bass', 'barrel', 'brontosaurus', 'lobster']
 
-codebook, table = populateTable(cats)
+# N of K, and desired cats
+k = 100
+cats = ['accordion']
+
+codebook, table = populateTable(cats,k)
+handle = str(k)+'_'+str(len(cats))
+os.makedirs('data/'+handle+'/')
 
 # Saves table and codebook
-joblib.dump(codebook,'codebook.pkl')
-joblib.dump(table,'table.pkl')
-
-
+joblib.dump(codebook,'data/'+handle+'/codebook_'+handle+'.pkl')
+joblib.dump(table,'data/'+handle+'/table_'+handle+'.pkl')
