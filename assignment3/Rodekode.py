@@ -20,3 +20,4 @@ vectorizer = TfidfVectorizer()
 table_list = [str(a[-1]) for a in table if a[2]==True]
 vectorizer.fit(table_list)
 
+cats = ['accordion', 'lobster', 'bass', 'panda', 'crocodile_head', 'brontosaurus', 'buddha', 'Faces']

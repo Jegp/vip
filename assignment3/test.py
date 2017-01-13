@@ -9,17 +9,13 @@ from sklearn.externals import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 #codebook = joblib.load('codebook.pkl')
-#table = joblib.load('table.pkl')
+table = joblib.load('data/1_2/table_1_2.pkl')
 
 # Query
-#able_hist = [(img[0], img[1], img[2], np.histogram(img[-1],700)[0]) for img in table]
+table_hist = [(img[0], img[1], img[2], np.histogram(img[-1],700)[0]) for img in table]
 
-#query = table_hist[-1]
+query = table_hist[-1]
 
-#closest = [(np.linalg.norm(query[-1]-img[-1]), img[0], img[1]) for img in table_hist]
+difference = [(np.linalg.norm(query[-1]-img[-1]), img[0], img[1]) for img in table_hist]
 #print(sorted(closest)[2])
-
-k = 500
-cats = ['accordion', 'wheelchair', 'soccer_ball', 'barrel', 'brontosaurus', 'lobster']
-handle = str(k)+'_'+str(len(cats))+'_'
-print(handle)
+print(table)

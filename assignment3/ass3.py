@@ -22,6 +22,7 @@ def train(k,des_array):
 # Retrieve files into training and test sets
 def splitFilesInDirectory(dir):
 	files = os.listdir(dir)
+	files = files[:20]
 	length = len(files)
 	training_files = [(cv2.imread(dir + '/' + img),img, dir, True) for img in files[length // 2:] if img[0] != "."]
 	test_files = [(cv2.imread(dir + '/' + img),img, dir, False) for img in files[:length // 2] if img[0] != "."]
@@ -42,13 +43,11 @@ def populateTable(categories,k):
 	return codebook, [(img[1],img[2], img[3], kkm.predict(descriptors(img[0]))) for img in test_data+training_data]
 
 
-
-
 # N of K, and desired cats
-ks = [1000, 1500, 1750, 2000]
+ks = [500, 1000, 1500, 1750, 2000]
 cats = ['accordion', 'lobster', 'bass', 'panda', 'crocodile_head', 'brontosaurus', 'buddha', 'Faces']
 
-for k in ks:	
+for k in ks:
 	#Creates dir with handle
 	handle = str(k)+'_'+str(len(cats))
 	os.makedirs('data/'+handle+'/')
@@ -57,4 +56,5 @@ for k in ks:
 	codebook, table = populateTable(cats,k)
 	joblib.dump(codebook,'data/'+handle+'/codebook_'+handle+'.pkl')
 	joblib.dump(table,'data/'+handle+'/table_'+handle+'.pkl')
+	print(table)
 		
