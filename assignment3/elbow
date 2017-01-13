@@ -1,9 +1,14 @@
 from sklearn.externals import joblib
 import cv2
 import numpy as np
+#import matplotlib.pyplot as plt
 from sklearn.cluster import KMeans
 import os
 import itertools
+from sklearn.externals import joblib
+from sklearn.feature_extraction.text import TfidfVectorizer
+import matplotlib.pyplot as plt
+import numpy as np
 
 # Find and return descriptors for given image
 def descriptors(image):
@@ -36,25 +41,33 @@ def populateTable(categories,k):
 		training_data = training_data + training_images
 		test_data = test_data + test_images
 
-	training_des_array = list(itertools.chain(*[descriptors(img[0]) for img in training_data]))
-	kkm = train(k,training_des_array)
-	codebook = kkm.cluster_centers_
-	return codebook, [(img[1],img[2], img[3], kkm.predict(descriptors(img[0]))) for img in test_data+training_data]
+	return list(itertools.chain(*[descriptors(img[0]) for img in training_data]))
+
+
+cats = ['bass','accordion']
+training_des_array = populateTable('bass',1)
 
 
 
 
-# N of K, and desired cats
-ks = [1000, 1500, 1750, 2000]
-cats = ['accordion', 'lobster', 'bass', 'panda', 'crocodile_head', 'brontosaurus', 'buddha', 'Faces']
 
-for k in ks:	
-	#Creates dir with handle
-	handle = str(k)+'_'+str(len(cats))
-	os.makedirs('data/'+handle+'/')
 
-	# Defines and dumps table and codebook
-	codebook, table = populateTable(cats,k)
-	joblib.dump(codebook,'data/'+handle+'/codebook_'+handle+'.pkl')
-	joblib.dump(table,'data/'+handle+'/table_'+handle+'.pkl')
-		
+
+table = joblib.load('data/750_8/table_750_8.pkl')
+print(training_des_array[0])
+
+
+def finding_elbow(data, minimum=100,maximum=110):
+    x_axis = []
+    y_axis = []
+    for i in range(minimum,maximum):
+        kmeans = KMeans(n_clusters = i)
+        kmeans.fit(des)
+        x_axis.append(i)
+        y_axis.append(kmeans.inertia_)
+        return x_axis, y_axis
+#x,y = finding_elbow(des)
+
+
+#plt.plot(x, y, linewidth=2.0)
+#plt.show()
