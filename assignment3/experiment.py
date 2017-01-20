@@ -4,7 +4,8 @@ import numpy as np
 
 
 # Load table from file
-file = '100_7'
+k_value = 100
+file = str(k_value) + '_8'
 table = joblib.load('data/'+file+'/table_'+file+'.pkl')
 
 # Creates histogram

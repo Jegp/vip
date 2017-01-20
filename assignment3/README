@@ -1,0 +1,25 @@
+This assignment has been made using Python, sklearn (version 0.18.1) and opencv (version 3.1.1).
+
+The code is split into two files: indexing.py and experiment.py
+
+The file indexing.py calculates the codebook and extracts the BoW for each image, 
+taken from a set of categories. Both the codebook and BoW-image table are stored in
+a binary format in the 'data' folder for later use in 'experiment.py'.
+The script performs the above for different values of k, currently set to a set of
+80, 90, 100, 190, 200, 500, 1000, 1500 and 2000.
+To run the script install sklearn and opencv in the above version, and create a
+dictionary in the same folder as the script called 'categories'. This folder
+should contain the Caltech 101 image dataset, which the script needs to perform
+its image analysis. The pre-selects the categories 'accordion', 'bass', 'brontosaurus',
+'pyramid', 'lobster', 'sunflower', 'hedgehog' and 'ferry'.
+
+The second script, experiment.py, performs the two experiments described in the
+report. The script simply extracts the data from the files, calculates the
+BoW distance-vectors and derives statistical measures to examine how well
+the vectors can be used to extract images from similar categories.
+The script depends on the data genated above in the 'data' folder, and
+extracts the metrics for one k-value at the time. This value can be changes
+by changing the 'k_value' variable in line 7.
+Running the script will print out statistics for running the test-queries on
+both the training and test set.
+

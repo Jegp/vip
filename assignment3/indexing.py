@@ -7,7 +7,6 @@ import itertools
 
 # Find and return descriptors for given image
 def descriptors(image):
-	print(type(image))
 	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 	sift = cv2.xfeatures2d.SIFT_create()
 	kp, des = sift.detectAndCompute(gray,None)
@@ -43,8 +42,8 @@ def populateTable(categories,k):
 	return codebook, [(img[1],img[2], img[3], kkm.predict(descriptors(img[0]))) for img in test_data+training_data]
 
 # N of K, and desired cats
-ks = [200, 300, 400, 1000, 1500, 2000	]
-cats = ['accordion', 'bass', 'brontosaurus', 'pyramid', 'lobster', 'sunflower', 'hedgehog']
+ks = [80, 90, 100, 190, 200, 500, 1000, 1500, 2000]
+cats = ['accordion', 'bass', 'brontosaurus', 'pyramid', 'lobster', 'sunflower', 'hedgehog', 'ferry']
 
 for k in ks:
 	#Creates dir with handle
@@ -56,5 +55,3 @@ for k in ks:
 	codebook, table = populateTable(cats,k)
 	joblib.dump(codebook,'data/'+handle+'/codebook_'+handle+'.pkl')
 	joblib.dump(table,'data/'+handle+'/table_'+handle+'.pkl')	
-	print(table)
-		
