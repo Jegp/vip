@@ -27,13 +27,16 @@ from scipy.sparse.linalg import spsolve
 from scipy.io import loadmat
 from matplotlib import pyplot as plt
 
+def rToL(r):
+	return [x for x in r];
+
 def cdx(f):
     """
     central differences for f-
     """
     m = f.shape[0]
-    west = [0] + range(m-1)
-    east = range(1,m) + [m-1]
+    west = [0] + rToL(range(m-1))
+    east = rToL(range(1,m)) + [m-1]
     return 0.5*(f[east,:] - f[west,:])
     
 def cdy(f):
@@ -41,8 +44,8 @@ def cdy(f):
     central differences for f-
     """
     n = f.shape[1]
-    south = [0] + range(n-1)
-    north = range(1,n) + [n-1]
+    south = [0] + rToL(range(n-1))
+    north = rToL(range(1,n)) + [n-1]
     return 0.5*(f[:,north] - f[:,south])
     
 def sub2ind(shape, X, Y):
