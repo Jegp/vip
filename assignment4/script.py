@@ -47,9 +47,22 @@ plt.imsave('beethoven_albedo1.png', albedo_images[0], cmap='gray')
 plt.imsave('beethoven_albedo2.png', albedo_images[1], cmap='gray')
 plt.imsave('beethoven_albedo3.png', albedo_images[2], cmap='gray')
 
-normal_field = np.array([[np.linalg.norm(vector) for vector in im] for im in m])
-p = images_from_mask(normal_field)
-depth_field = ps_utils.simchony_integrate(p[0], p[1], p[2], mask)
+normal_field = np.zeros([256, 256, 3, 3])
+counter = 0
+for x in range(0, 256):
+	for y in range(0, 256):
+		if mask[x][y] > 0:
+			normal_field[x][y] = np.array([m[0][counter], m[1][counter], m[2][counter]])
+			counter += 1
+n1 = np.array([[np.linalg.norm(pixel[0]) for pixel in row] for row in normal_field])
+n2 = np.array([[np.linalg.norm(pixel[1]) for pixel in row] for row in normal_field])
+n3 = np.array([[np.linalg.norm(pixel[2]) for pixel in row] for row in normal_field])
+
+n1[n1==0] = np.nan
+n2[n2==0] = np.nan
+n3[n3==0] = np.nan
+
+depth_field = ps_utils.simchony_integrate(n1, n2, n3, mask)
 print(depth_field.shape)
-print(depth_field[100])
 ps_utils.display_depth_matplotlib(depth_field)
+
