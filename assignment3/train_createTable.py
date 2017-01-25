@@ -41,7 +41,7 @@ def populateTable(categories,k):
 	return codebook, [(img[1],img[2], img[3], kkm.predict(descriptors(img[0]))) for img in test_data+training_data]
 
 # N of K, and desired cats
-ks = [180, 200, 210, 220,230,240]
+ks = [80]
 cats = ['accordion', 'bass', 'brontosaurus', 'pyramid', 'lobster', 'sunflower', 'hedgehog', 'ferry']
 
 for k in ks:
