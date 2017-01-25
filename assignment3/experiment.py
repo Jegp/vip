@@ -10,7 +10,7 @@ table = joblib.load('data/'+file+'/table_'+file+'.pkl')
 
 # Creates histogram
 def createHist(table,k):
-	return [(img[0], img[1], img[2], np.histogram(img[-1],k)[0]) for img in table]
+	return [(img[0], img[1], img[2], np.histogram(img[-1],bins=k)[0]) for img in table]
 table_hist = createHist(table,100)
 
 # Retrives queries on test and train
